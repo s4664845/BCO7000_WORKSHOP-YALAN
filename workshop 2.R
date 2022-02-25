@@ -24,12 +24,12 @@ ggplot(mpg,aes(displ, hwy, color = class)) +
   geom_point()
 
 
-ggplot(mpg,aes(displ, hwy，color = class)) +
+ggplot(mpg,aes(displ, hwy, color = class)) +
   geom_point()  
  
 
 
-ggplot(mpg, aes(displ, hwy，color = trans)) +
+ggplot(mpg, aes(displ, hwy, color = trans)) +
   geom_point()  + 
   facet_wrap(~class)+
   labs(x="displacement",y= "highway miles",colour = "transmission",title = "point graph", caption = "figure l")
