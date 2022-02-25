@@ -1,7 +1,7 @@
 a<- 10
 a
 rm
-#loda the package
+#load the package
 library(tidyverse)
 data(mpg)
 summary(mpg)
