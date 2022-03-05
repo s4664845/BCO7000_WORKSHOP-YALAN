@@ -1,0 +1,35 @@
+---
+title: "workshop 4"
+author: "Yalan"
+date: "03/03/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# workshop4
+
+## pachages and dataset
+
+I want to load the dataset from link[here](https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewing_materials.csv)
+
+```{r}
+library(tidyverse)
+#install.packages("skimr")
+library(skimr)
+
+#install.packages("lubridate")
+library(lubridate)
+```
+ ## 1. analysis
+ we are skimming dataset
+```{r}
+brewing_materials <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewing_materials.csv')
+
+brewer_size <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewer_size.csv')
+
+skim(brewing_materials)
+```
+ 
