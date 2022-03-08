@@ -19,7 +19,7 @@ I want to load the dataset from link[here](https://raw.githubusercontent.com/rfo
 library(tidyverse)
 #install.packages("skimr")
 library(skimr)
-
+library(knitr)
 #install.packages("lubridate")
 library(lubridate)
 ```
@@ -31,5 +31,51 @@ brewing_materials <- read_csv('https://raw.githubusercontent.com/rfordatascience
 brewer_size <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewer_size.csv')
 
 skim(brewing_materials)
+
+#lubridate
+#creat a new variable named date
+brewing_material <- brewing_materials %>%
+  mutate(date = ymd(paste(year,month, 1))) %>%
+  filter(year < 2016)
+
+
+#remove total values
+# coord_flip make x to vertical y to horizontal,! means not,geom col is a bar chart for one discrete variable one continuous
+
+brewing_material %>%
+  filter(!str_detect(material_type, "Total")) %>%
+  ggplot(aes(type, month_current, fill = material_type)) +
+  geom_col() +
+  coord_flip() +
+  scale_y_continuous(labels = scales::comma)
+
+# str_detect means extract 'total' from material_type, mutate here means new variable output type,arrange by month_current
+brewing_material %>%
+  filter(!str_detect(material_type, "Total")) %>%
+  mutate(type= fct_reorder(type, month_current)) %>%
+  ggplot(aes(type, month_current, fill = material_type)) +
+  geom_col() +
+  coord_flip() +
+  scale_y_continuous(labels = scales::comma) +
+  labs(x="ingredients", y="Total Production",fill= "material type", title = "Bar chart")
+
+# change category to factor (number) ,class means list the type of variable
+
+class(brewing_material$type)
+class(brewing_material$date)
+
+#as_factor change tpye character to number
+brewing_material$type <- as_factor(brewing_material$type)
+class(brewing_material$type)
+
+brewer_size %>%
+  count(brewer_size) %>%
+  arrange(desc(n)) %>%
+  kable()
+
+brewer_size%>%
+  mutate(brewer_size = fct_lump(brewer_size,n=10)) %>%
+  count(brewer_size)
+
 ```
  
