@@ -64,7 +64,11 @@ brewing_material %>%
 class(brewing_material$type)
 class(brewing_material$date)
 
+<<<<<<< HEAD
 #as_factor change tpye character to number
+=======
+#as_factor
+>>>>>>> 82e08a635c87a9c8696ed5890184044c12b8effc
 brewing_material$type <- as_factor(brewing_material$type)
 class(brewing_material$type)
 
