@@ -1,0 +1,99 @@
+---
+title: "Workshop 5"
+author: "Yalan S4664845"
+date: "10/03/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown workshop 5
+
+
+
+```{r}
+#install.packages("tidyverse")
+library(tidyverse)
+library(knitr)
+
+dataset <- mpg
+kable(dataset[1:15,],caption = "First 15 rows")
+
+2.#Count the number of cars for each 'class' and their type of drive train 'drv'. Display the Top 5.
+
+dataset %>%
+  count(class)
+
+dataset %>%
+  count(class, drv, sort = TRUE) %>%
+  top_n(5)
+
+dataset %>%
+  count(class, drv)
+
+dataset %>%
+  count(class, drv, sort = TRUE, name = "total cars") %>%
+  top_n(5) %>%
+  kable()
+
+ top_5 <-dataset %>%
+  count(class, drv, sort = TRUE, name = "totalcars") %>%
+  top_n(5)
+ 
+kable(top_5)
+
+# have name of dataset on top ,we dont need to add dataset mane in ggploy or kable.
+# if use ggplot or kable peparately, we have to ass dataset name
+
+
+#3. Make a bar chart to show the number of cars per each type of drive train 'drv' in the top 5 'class' (by number of cars). Facet the chart for different type of drive train. Put title and custom legends.
+
+ggplot(top_5, aes(class,totalcars)) +
+  geom_col()
+
+ggplot(top_5, aes(class,totalcars, fill=class)) +
+  geom_col()+
+  facet_wrap(~drv) +
+  coord_flip()
+
+
+ggplot(top_5, aes(class,totalcars,fill=class)) +
+  geom_col()+
+  facet_wrap(~drv) +
+  coord_flip()+
+  labs(x="class of cars", y="No of Cars", fill="class", title="top 5 class per type of drive train")
+
+#4Create a dataset with new column for average city miles per gallon 'cty' for each 'class' of car for each 'manufacturer'. Show top 15 with highest average city miles per gallon.
+#when use group with summarise always ungroup
+new_avg_city_miles <-dataset %>%
+  group_by(class,manufacturer) %>%
+  summarise(avg_city_miles = mean(cty)) %>%
+  ungroup()
+#why summarise not mutate mutate create new variable. summirise only variables we needed.
+new_avg_city_miles <-dataset %>%
+  group_by(class,manufacturer) %>%
+  summarise(avg_city_miles = mean(cty)) %>%
+  ungroup() %>%
+  arrange(desc(avg_city_miles))
+
+kable(new_avg_city_miles[1:15,])
+
+
+#5. Create a line graph to show all the 'manufacturer' with their average city miles per gallon for class 'compact'. Put title and custom legends.
+#when create line graph 1. use geom_point together  geom_point 2.have to join point as a line group = 1
+new_avg_city_miles%>%
+  filter(class == "compact")  %>%
+  ggplot(aes(manufacturer, avg_city_miles, group = 1))+
+  geom_line() +
+  geom_point()
+
+# mutate is ask to reorger manufacturer
+new_avg_city_miles%>%
+  filter(class == "compact")  %>%
+  mutate(manufacturer = fct_reorder(manufacturer, avg_city_miles)) %>% 
+  ggplot(aes(manufacturer, avg_city_miles, group = 1))+
+  geom_line() +
+  geom_point() +
+  labs(x="name of manufacturer", y="Average city miles per gallon", title = "average city miles for different manufacturer with compact")
